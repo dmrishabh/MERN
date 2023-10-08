@@ -2,15 +2,18 @@ import express from 'express';
 import dotenv from 'dotenv';
 import userRoute from './Routes/userRoute.js';
 import {notFound, errorHandler} from './middleware/errorMiddleware.js';
-dotenv.config();
-const port = process.env.PORT || 8080;
+import connectDB from './config/db.js';
+
+dotenv.config(); 
+const port = 8080;
+connectDB();
 
 const app = express();
 
 app.use('/api/users', userRoute);
 
 app.get('/', (req, res)=> res.send('Server is up '));
-
+ 
 app.use(notFound);
 app.use(errorHandler);
 
