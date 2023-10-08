@@ -7,7 +7,7 @@ import userModel from '../models/userModel.js';
 
 const authUser = asyncHandler( async (req, res) => {
   res.status(200).json({message: 'Autheciated user'});
-});
+});   
 
 // @desc register a user
 // route POST /api/users
