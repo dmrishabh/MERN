@@ -1,5 +1,7 @@
 /* eslint-disable indent */
 import mongoose from "mongoose";
+import bcrypt from 'bcryptjs'
+
 // TODO: Read about mongoose on doc;
 const userSchema = mongoose.Schema({
     firstName: {
@@ -27,7 +29,19 @@ const userSchema = mongoose.Schema({
     timeStamps: true,
 });
 
-const userModel = mongoose.model('User', userSchema);
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        next();
+    }
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+})
 
-export default userModel;
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+}
+
+const User = mongoose.model('User', userSchema);
+
+export default User;
 
